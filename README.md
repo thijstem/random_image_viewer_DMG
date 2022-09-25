@@ -14,7 +14,7 @@ handleiding
    1. PYTHON terminal: pip install django
 5. python manage.py runserver
    1. duurt een halfuur: via sparql alle manifesten ophalen en bewaren in dataframe
-   2. _beter om direct in csv te bewaren_
+   2. _beter om direct in csv te bewaren_  (+ manier nodig om alle unieke rijen te filteren, of enkel unieke manifesten toe te voegen tijdens de query. manifestenDMG heeft 140.000+ rijen voor 3000 objectnummers > onhandelbaar groot)
 6. open http://127.0.0.1:8000/getimage/image/
 7. herlaad voor een nieuw willekeurig beeld
 
