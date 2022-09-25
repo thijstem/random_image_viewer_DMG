@@ -7,35 +7,47 @@
     </head>
     <body>
         <div class="fullheader">
-            <div class="logoparent">
+            <!-- <div class="logoparent">
                 <div class="logochild1">
                     {% load static %} <img src="{% static 'images/logocogent.jpg' %}", style= 'height:95%; width: 95%; object-fit: contain'>
                 </div>
-            </div>
+            </div> -->
             <div class="header">
-                <h1>CoGent Random Image Viewer</h1>
+                <h1>Willekeurige wonderlijke objecten uit de collectie van Design Museum Gent </h1>
             </div>
             <div class="logoparent">
                 <div class="logochild2">
                 </div>
             </div>
         </div>
-        <div class = 'heading'>
-            <h2>Your Image:</h2>
-        </div>
+
         <div class = 'graphbox'>
             <div class="graph">
                 <img src="{{ iiif_manifest|safe }}", style=  'width: 100%; margin-left: 1cm; margin-top: 1cm; margin-bottom: 1cm; margin-right: 1cm'>
             </div>
             <div class="graph2">
                 <h4 class="text">
-                    Instelling: 
+                    Erfgoedinstelling:
                 </h4>
                 <h5 class="text2">{{ instelling|safe }} <br></h5>
                 <h4 class="text">Titel: 
                 </h4>
                 <h5 class="text2">{{ label|safe }} <br></h5>
+                <h4 class="text">Rechtentype:
+                </h4>
+                <h5 class="text2">{{ rechtentype|safe }} <br></h5>
+                <h4 class="text">Attributie:
+                </h4>
+                <h5 class="text2">{{ attributie|safe }} <br></h5>
+                <h4 class="text">IIIF-manifest:
+                </h4>
+                <h5 class="text2">{{ manifest|safe }} <br></h5>
+                <h4 class="text">Meer info:
+                </h4>
+                <h5 class="text2">{{ webplatform|safe }} <br></h5>
             </div>
         </div>
     </body>
 </html>
+
+<!-- <a href="https://data.collectie.gent">Collectie van de Gentenaar</a> -->

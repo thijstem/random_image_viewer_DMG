@@ -1,14 +1,13 @@
 h1 {
-    color: #39FF14;
+    color: red;
     font-family: 'Chakra Petch', sans-serif;
-    font-size: 3cm;
-    text-align: center;
+    font-size: 400%;
 }
 
 h2 {
-    color: rgb(12, 12, 12);
+    color: orange;
     font-family: 'Chakra Petch', sans-serif;
-    font-size: 400%;
+    font-size: 80%;
     text-align: left;
     margin-left: 1cm;
 }
@@ -56,15 +55,15 @@ h2 {
     margin: 1cm;
     color: rgb(12, 12, 12);
     font-family: 'Chakra Petch', sans-serif;
-    font-size: 250%;
+    font-size: 100%;
     text-align: left;
 }
 
 .text2 {
     margin: 1cm;
-    color: #39FF14;
+    color: red;
     font-family: 'Chakra Petch', sans-serif;
-    font-size: 250%;
+    font-size: 100%;
     text-align: left;
 }
 
@@ -129,21 +128,21 @@ option {
 }
 
 .fullheader {
-    height: 7cm;
+    height: 5cm;
     width: 100%;
     text-align: center;
 }
 
 .header {
-    width: 70%;
+    width: 100%;
     float: left;
-    height: 7cm
+    height: 2cm
 }
 
 .logoparent {
     width: 15%;
     float: left;
-    height: 5cm
+    height: 3cm
 }
 
 .logochild1 {

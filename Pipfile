@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 pandas = "*"
 pylodstorage = "*"
+alive-progress = "*"
 
 [dev-packages]
 

@@ -8,73 +8,14 @@ import math
 import random
 from urllib.error import HTTPError
 from urllib.request import urlopen
+from alive_progress import alive_bar
+from time import sleep
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-sparqlQuery = """PREFIX purl: <http://purl.org/dc/terms/>
-PREFIX cidoc: <http://www.cidoc-crm.org/cidoc-crm/>
-SELECT COUNT (DISTINCT ?title )
-WHERE {
-SELECT ?title
-FROM <http://stad.gent/ldes/hva> 
-FROM <http://stad.gent/ldes/dmg>
-FROM <http://stad.gent/ldes/industriemuseum>
-FROM <http://stad.gent/ldes/archief>
-FROM <http://stad.gent/ldes/stam>
-
-WHERE {
-?s cidoc:P102_has_title ?title.
-?s cidoc:P129i_is_subject_of ?beeld.
-?s purl:isVersionOf ?priref.
-}
-}
-"""
-
-sparql = SPARQL("https://stad.gent/sparql")
-qlod = sparql.queryAsListOfDicts(sparqlQuery)
-aantal = qlod[0]['callret-0']
-offsetrange = aantal / 1000
-
-# determine number of pages to query
-pages = math.ceil(offsetrange)
-
-# determine offset range to query
-offsetrange = list(range(0, 1000 * pages, 1000))
-
-querylist = []
-for offset in offsetrange:
-    querylist.append("""PREFIX purl: <http://purl.org/dc/terms/>
-    PREFIX cidoc: <http://www.cidoc-crm.org/cidoc-crm/>
-    
-    SELECT DISTINCT ?title ?beeld ?priref
-    FROM <http://stad.gent/ldes/hva> 
-    FROM <http://stad.gent/ldes/dmg>
-    FROM <http://stad.gent/ldes/industriemuseum>
-    FROM <http://stad.gent/ldes/archief>
-    FROM <http://stad.gent/ldes/stam>
-    
-    WHERE {
-    ?s cidoc:P102_has_title ?title.
-    ?s cidoc:P129i_is_subject_of ?beeld.
-    ?s purl:isVersionOf ?priref.
-    } LIMIT 1000""" + str(offset))
-
-df_sparql = pd.DataFrame()
-for query in querylist:
-    sparqlQuery = query
-    sparql = SPARQL("https://stad.gent/sparql")
-    qlod = sparql.queryAsListOfDicts(sparqlQuery)
-    csv = CSV.toCSV(qlod)
-    df_result = pd.DataFrame([x.split(',') for x in csv.split('\n')])
-    df_sparql = df_sparql.append(df_result, ignore_index=True)
-
-df_sparql = df_sparql[df_sparql[1].str.contains("api", na=False)]
-df_sparql = df_sparql.sample(frac=1)
-df_sparql[1] = df_sparql[1].str.replace(r'"', '')
-df_sparql[1] = df_sparql[1].str.replace(r'\r', '')
-
-iiifmanifesten = df_sparql[1].tolist()
-
+df_sparql = pd.read_csv("manifestenDMG.csv")
+iiifmanifesten = df_sparql['1'].tolist()
+print(iiifmanifesten[0])
 
 def image(request):
     x = random.randint(0, len(iiifmanifesten))
@@ -92,7 +33,15 @@ def image(request):
         print(data_json)
         iiif_manifest = data_json["sequences"][0]['canvases'][0]["images"][0]["resource"]["@id"]
         print(iiif_manifest)
+        afbeelding = iiif_manifest.replace("full/full/0/default.jpg","full/1000,/0/default.jpg")
         label = data_json["label"]['@value']
+        #beschrijving = data_json["description"]
+        manifestje = data_json["@id"]
+        rechtentype = data_json["sequences"][0]['canvases'][0]["images"][0]["license"]
+        attributie = data_json["sequences"][0]['canvases'][0]["images"][0]["attribution"]
+        objectnummer = manifestje.rpartition('/')[2]
+        webplatform = "https://data.collectie.gent/entity/" + objectnummer
+        print(webplatform)
         print(label)
         if 'stam' in manifest:
             instelling = 'STAM'
@@ -104,12 +53,18 @@ def image(request):
             instelling = 'Industriemuseum'
         else:
             instelling = 'Archief Gent'
-        print(instelling)            
-        return render(request, 'image.html', {'iiif_manifest': iiif_manifest, 'instelling': instelling, 'label': label})
+        print(instelling)
+        return render(request, 'image.html', {'iiif_manifest': afbeelding, 'instelling': instelling, 'label': label, 'manifest': manifestje, 'webplatform': webplatform, 'rechtentype': rechtentype, 'attributie': attributie})
 
 
 
 
 
 
-    
+
+
+
+
+##wishlist: filter de list > enkel DMGs eruit halen (of dat pas bij ophalen niveau doen?
+##mooiere layout en meer info > link webplatform mogelijk te halen uit manifest, alles na manifest/
+## zo erbij zetten, direct ook met rechteninfo bij
